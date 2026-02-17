@@ -9,7 +9,7 @@ service = Service(gecko_driver_path)
 
 driver = webdriver.Firefox(service=service)
 
-driver.get("http://the-internet.herokuapp.com/login")
+driver.get("http://the-internet.herokuapp.com/inputs")
 
 input_field = driver.find_element(By.CSS_SELECTOR, "input[type='number']")
 
@@ -22,7 +22,5 @@ input_field.clear()
 input_field.send_keys("Pro")
 
 time.sleep(2)
-
-driver.quit()
 
 driver.quit()
