@@ -7,9 +7,13 @@ import pytest
 
 EXPECTED_TOTAL = "$58.29"
 
-driver = webdriver.Firefox()
+@pytest.fixture
+def driver():
+    driver = webdriver.Firefox()
+    yield driver
+    driver.quit()
 
-def test_shop():
+def test_shop(driver):
     driver.get("https://www.saucedemo.com")
 
     driver.find_element(By.ID, "user-name").send_keys("standard_user")
@@ -21,7 +25,7 @@ def test_shop():
     driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
     driver.find_element(By.ID, "add-to-cart-sauce-labs-bolt-t-shirt").click()
     driver.find_element(By.ID, "add-to-cart-sauce-labs-onesie").click()
-    driver.find_element(By.CSS_SELECTOR, "shopping_cart_link").click()
+    driver.find_element(By.CSS_SELECTOR, ".shopping_cart_link").click()
     
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "checkout"))).click()
     
@@ -37,6 +41,3 @@ def test_shop():
     print(f"Итоговая стоимость: {total_text}")
 
     assert total_text == f"Total: {EXPECTED_TOTAL}", f"Ожидалось {EXPECTED_TOTAL}, но получено {total_text}"
-    
-    driver.quit()
-    

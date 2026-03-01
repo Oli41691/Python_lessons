@@ -6,27 +6,27 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pytest
 
-driver = webdriver.Chrome(
+@pytest.fixture
+def driver():
+    driver = webdriver.Chrome(
     service=ChromeService(ChromeDriverManager().install()))
+    yield driver
+    driver.quit()
 
-def test_calc():
+def test_calc(driver):
     driver.get(" https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html")
-    
+   
     delay_input = driver.find_element(By.CSS_SELECTOR, "#delay")
     delay_input.send_keys("45")
 
-    driver.find_element_by_xpath("//*[text()='7']").click()
+    driver.find_element(By.CSS_SELECTOR, "button[value='7']").click()
     driver.find_element(By.CSS_SELECTOR, ".btn-outline-success").click()
-    driver.find_element_by_xpath("//*[text()='8']").click()
+    driver.find_element(By.CSS_SELECTOR, "button[value='8']").click()
     driver.find_element(By.CSS_SELECTOR, ".btn-outline-warning").click()
 
-    result_locator = "#screen" 
-    WebDriverWait(driver, 45).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, result_locator), "15"))
-
-    # Получаем текст результата
-    result_text = driver.find_element(By.CSS_SELECTOR, result_locator).text
-
-    # Проверяем, что результат равен 15
-    assert result_text == "15", f"Expected result to be 15, but got {result_text}"
+    result = WebDriverWait(driver, 54).until(
+        EC.text_to_be_present_in_element((By.CSS_SELECTOR, "#result"), "15")
+    )
+    assert result, "The result is not correct."
 
     driver.quit()
