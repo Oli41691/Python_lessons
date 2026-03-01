@@ -17,6 +17,7 @@ def driver():
     driver.quit()
 
 def test_form_submission(driver):
+    wait = WebDriverWait(driver, 10)
     driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
 
     driver.find_element(By.NAME, "first-name").send_keys("Иван")
@@ -34,12 +35,15 @@ def test_form_submission(driver):
 
     driver.implicitly_wait(5)
 
-    zipcode_field = driver.find_element(By.NAME, "zip-code")
-    assert "error" in zipcode_field.get_attribute("class"), "Zip code field is not highlighted in red."
+    zip_code_field = driver.find_element(By.NAME, "zip-code")
 
-    fields = ["first-name", "last-name", "address", "email", "phone", "city", "country", "job-position", "company"]
+    wait.until(lambda d: 'error' in zipcode_field.get_attribute("class"))
+    assert "error" in zipcode_field.get_attribute("class"), "Zip code не подсвечен в красный"
+
+    fields = ["first-name", "last-name", "address", "e-mail", "phone", "city", "country", "job-position", "company"]
     for field_name in fields:
-            field = driver.find_element(By.NAME, field_name)
-            assert "success" in field.get_attribute("class"), f"{field_name} field is not highlighted in green."
+        field = driver.find_element(By.NAME, field_name)
+        wait.until(lambda d: 'success' in field.get_attribute("class"))
+        assert "success" in field.get_attribute("class"), f"{field_name} не подсвечен в зеленый"
             
     print("All assertions passed.")
