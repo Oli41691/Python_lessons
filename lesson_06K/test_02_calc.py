@@ -19,9 +19,9 @@ def test_calc(driver):
     delay_input = driver.find_element(By.CSS_SELECTOR, "#delay")
     delay_input.send_keys("45")
 
-    driver.find_element(By.CSS_SELECTOR, "button[value='7']").click()
+    driver.find_element(By.XPATH, "//span[text()='7']").click()
     driver.find_element(By.CSS_SELECTOR, ".btn-outline-success").click()
-    driver.find_element(By.CSS_SELECTOR, "button[value='8']").click()
+    driver.find_element(By.XPATH, "//span[text()='8']").click()
     driver.find_element(By.CSS_SELECTOR, ".btn-outline-warning").click()
 
     result = WebDriverWait(driver, 54).until(

@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 @pytest.fixture
 def driver():
     options = webdriver.EdgeOptions()
-    driver = webdriver.Edge(service=Service(EdgeChromiumDriverManager().install()), options=options)
+    driver = webdriver.Edge()
     driver.maximize_window()
     yield driver
     driver.quit()
