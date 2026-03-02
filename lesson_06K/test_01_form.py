@@ -7,10 +7,8 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 @pytest.fixture
 def driver():
-    options = webdriver.EdgeOptions()
     driver = webdriver.Edge()
     driver.maximize_window()
     yield driver
@@ -33,17 +31,27 @@ def test_form_submission(driver):
 
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
-    driver.implicitly_wait(5)
+    zip_code_element = WebDriverWait(driver, 15).until(
+    EC.presence_of_element_located((By.NAME, "zip-code")))
 
-    zip_code_field = driver.find_element(By.NAME, "zip-code")
+    classes_zip = zip_code_element.get_attribute("class")
+    assert "alert-danger" in classes_zip, "Zip-code не выделен классом alert-danger"
 
-    wait.until(lambda d: 'error' in zipcode_field.get_attribute("class"))
-    assert "error" in zipcode_field.get_attribute("class"), "Zip code не подсвечен в красный"
-
-    fields = ["first-name", "last-name", "address", "e-mail", "phone", "city", "country", "job-position", "company"]
-    for field_name in fields:
-        field = driver.find_element(By.NAME, field_name)
-        wait.until(lambda d: 'success' in field.get_attribute("class"))
-        assert "success" in field.get_attribute("class"), f"{field_name} не подсвечен в зеленый"
+    fields = {
+    "first-name": "First Name",
+    "last-name": "Last Name",
+    "address": "Address",
+    "e-mail": "E-mail",
+    "phone": "Phone",
+    "city": "City",
+    "country": "Country",
+    "job-position": "Job Position",
+    "company": "Company"
+    }
+    
+    for name_attr, description in fields.items():
+        element = driver.find_element(By.NAME, name_attr)
+        classes = element.get_attribute("class")
+        assert "alert-success" in classes, f"{description} не выделен классом alert-success"
             
     print("All assertions passed.")
