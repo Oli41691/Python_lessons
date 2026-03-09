@@ -18,9 +18,7 @@ def test_shop(driver):
     shop_page.add_product("add-to-cart-sauce-labs-onesie")
     shop_page.go_to_cart()
     shop_page.proceed_checkout()
-    shop_page.add_info("first_name", "Olga")
-    shop_page.add_info("last_name", "Prikhodko")
-    shop_page.add_info("postal_code", "198332")
+    shop_page.fill_form("Olga", "Prikhodko", "198332")
     total_text = shop_page.get_total()
 
     print(f"Итоговая стоимость: {total_text}")

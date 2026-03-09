@@ -25,7 +25,7 @@ class CalcPage:
     def wait_for_result(self, expected_text, timeout=45):
         try:
             WebDriverWait(self.driver, timeout).until(
-            EC.text_to_be_present_in_element((By.CSS_SELECTOR, "#result"), expected_text)
+            EC.text_to_be_present_in_element((By.CSS_SELECTOR, ".screen"), expected_text)
         )
             return True
         except:

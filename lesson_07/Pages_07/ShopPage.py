@@ -10,6 +10,11 @@ class ShopPage:
             'password': "secret_sauce",
         }
         self.wait = WebDriverWait(driver, 10)
+        self.first_name = (By.ID, 'first-name')
+        self.last_name = (By.ID, 'last-name')
+        self.postal_code = (By.ID, 'postal-code')
+        self.continue_button = (By.ID, 'continue')
+        self.total_label = (By.CLASS_NAME, 'summary_total_label')
 
     def open(self):
         self.driver.get(
@@ -31,24 +36,12 @@ class ShopPage:
     def proceed_checkout(self, timeout=10):
         self.wait.until(EC.element_to_be_clickable((By.ID, "checkout"))).click()
 
-    def add_info(self, info_type, value):
-        if info_type == "first_name":
-            element_id = "first-name"
-        elif info_type == "last_name":
-            element_id = "last-name"
-        elif info_type == "postal_code":
-            element_id = "postal-code"
-        elif info_type == ".cart_button":
-            button = WebDriverWait(self.driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".cart_button")))
-            button.click()
-            return self
-        else:
-            raise ValueError(f"Unknown info_type: {info_type}")
-
-        self.wait.until(EC.presence_of_element_located((By.ID, element_id))).send_keys(value)
-
+    def fill_form(self, first_name, last_name, postal_code):
+        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.first_name)).send_keys(first_name)
+        self.driver.find_element(*self.last_name).send_keys(last_name)
+        self.driver.find_element(*self.postal_code).send_keys(postal_code)
+        self.driver.find_element(*self.continue_button).click()
+    
     def get_total(self):
-        total_text = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, 'summary_total_label'))
-        ).text
+        total_text = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.total_label)).text
         return total_text
