@@ -2,8 +2,7 @@ import pytest
 from ApiClient import ApiClient
 
 BASE_URL = "https://ru.yougile.com"
-LOGIN = "prikhodko.ol14@gmail.com"
-PASSWORD = "qwedsass13"
+
 
 @pytest.fixture
 def api_client():
