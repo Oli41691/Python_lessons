@@ -13,6 +13,10 @@ def test_add_subject():
             {'id': 201}
         ).fetchone()
         assert result and result[0] == 'История искусства'
+    
+    connection.execute(
+    text("DELETE FROM subject WHERE \"subject_id\"=:id"),
+    {'id': 201})
 
 def test_update_subject():
     with db.connect() as connection:
@@ -30,8 +34,12 @@ def test_update_subject():
         ).fetchone()
         assert result and result[0] == 'Философия'
 
+    connection.execute(
+    text("DELETE FROM subject WHERE \"subject_id\"=:id"),
+    {'id': 190})
+
 def test_delete_subject():
-     with db.connect() as connection:
+    with db.connect() as connection:
         connection.execute(
             text("INSERT INTO subject(\"subject_id\", \"subject_title\") VALUES (:id,:title)"),
             {'id': 220, 'title': 'Теория и история культуры'}
@@ -45,3 +53,7 @@ def test_delete_subject():
             {'id': 220}
         ).fetchall()
         assert len(result) == 0, "Запись должна быть помечена как удалённая (нет в активных)"
+    
+    connection.execute(
+    text("DELETE FROM subject WHERE \"subject_id\"=:id"),
+    {'id': 220})
